@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-java-app
+  namespace: devops-bootcamp
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: my-java-app.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: myapp
+            port:
+              number: 8081
+        path: /
+        pathType: Prefix

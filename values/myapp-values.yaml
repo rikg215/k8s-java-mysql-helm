@@ -1,0 +1,15 @@
+# Example environment values for the myapp chart.
+# Copy this file per environment and override only what differs from charts/myapp/values.yaml.
+
+replicaCount: 2
+imageName: rik215/bootcamp-test:my-app-1
+registrySecret: docker-auth
+
+ingress:
+  className: nginx
+  host: my-java-app.com
+
+configData:
+  DB_SERVER: mysql-primary   # Service created by the "mysql" release
+  DB_NAME: test_db
+  DB_USER: testuser

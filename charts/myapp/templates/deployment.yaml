@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+      annotations:
+        # Roll the pods when config or secret values change
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      {{- with .Values.registrySecret }}
+      imagePullSecrets:
+      - name: {{ . }}
+      {{- end }}
+      containers:
+      - name: {{ .Values.appName }}
+        image: {{ .Values.imageName | quote }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.appPort }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.appName }}-config
+        - secretRef:
+            name: {{ .Values.appName }}-secret
+        readinessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 45
+          periodSeconds: 20
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}

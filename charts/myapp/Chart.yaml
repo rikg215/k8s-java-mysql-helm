@@ -1,0 +1,9 @@
+apiVersion: v2
+name: myapp
+description: Spring Boot + MySQL team-roles app — Deployment, Service, Ingress, ConfigMap and Secret
+type: application
+version: 0.2.0
+appVersion: "1.0-SNAPSHOT"
+maintainers:
+  - name: Amrik Ghuman
+    url: https://github.com/rikg215

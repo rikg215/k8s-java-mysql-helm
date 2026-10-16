@@ -1,0 +1,37 @@
+# Default values for the myapp chart.
+# Override per environment with a custom values file (see values/myapp-values.yaml).
+
+appName: myapp
+replicaCount: 2
+
+# Full image reference (repository:tag)
+imageName: rik215/bootcamp-test:my-app-1
+# Name of an existing kubernetes.io/dockerconfigjson Secret for the private registry
+registrySecret: docker-auth
+
+# Port the Spring Boot app listens on inside the container
+appPort: 8080
+
+svcType: ClusterIP
+svcPort: 8081
+
+ingress:
+  className: nginx
+  host: my-java-app.com
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+# Non-sensitive env vars -> ConfigMap. Keys are the env var names the app reads.
+configData:
+  DB_SERVER: mysql-primary
+  DB_NAME: test_db
+  DB_USER: testuser
+
+# Sensitive env vars -> Secret (plain text here; the template base64-encodes).
+# Don't commit real values — supply them at deploy time (helmfile reads DB_PASSWORD from the environment).
+secretData: {}

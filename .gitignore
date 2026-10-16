@@ -1,0 +1,8 @@
+.idea
+build
+out
+.gradle*
+
+# Local secrets / rendered values
+*.secret.yaml
+.env

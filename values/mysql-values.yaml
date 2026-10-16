@@ -1,0 +1,14 @@
+# Values for the vendored Bitnami MySQL chart (charts/mysql).
+# Bitnami moved its free images to "bitnamilegacy" in 2025, so the image is overridden here.
+global:
+  security:
+    allowInsecureImages: true
+image:
+  registry: docker.io
+  repository: bitnamilegacy/mysql
+  tag: latest
+architecture: replication
+auth:
+  username: testuser
+  database: test_db
+  # password / rootPassword come from values/mysql-secrets.yaml.gotmpl

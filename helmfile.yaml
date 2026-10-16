@@ -1,0 +1,24 @@
+# Deploys the whole stack into one namespace:
+#   mysql  - Bitnami MySQL (primary + secondary replication), vendored in charts/mysql
+#   myapp  - the Java app chart from charts/myapp
+#
+# Passwords are never committed. Export them before running:
+#   export DB_PASSWORD='...'  DB_ROOT_PASSWORD='...'
+#   helmfile sync
+
+releases:
+  - name: mysql
+    namespace: devops-bootcamp
+    chart: ./charts/mysql
+    values:
+      - values/mysql-values.yaml
+      - values/mysql-secrets.yaml.gotmpl
+
+  - name: myapp
+    namespace: devops-bootcamp
+    chart: ./charts/myapp
+    needs:
+      - devops-bootcamp/mysql
+    values:
+      - values/myapp-values.yaml
+      - values/myapp-secrets.yaml.gotmpl
